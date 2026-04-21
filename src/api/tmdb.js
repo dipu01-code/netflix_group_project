@@ -29,5 +29,8 @@ export const getMovieDetail  = (id) => apiFetch(`/movie/${id}`,  { append_to_res
 export const getTVDetail     = (id) => apiFetch(`/tv/${id}`,     { append_to_response: 'videos,credits,similar' });
 export const getPersonDetail = (id) => apiFetch(`/person/${id}`, { append_to_response: 'combined_credits' });
 
+// ── TV Seasons / Episodes ─────────────────────────────────────────────────────
+export const getTVSeason = (tvId, seasonNum) => apiFetch(`/tv/${tvId}/season/${seasonNum}`);
+
 // ── Trending / Popular ────────────────────────────────────────────────────────
 export const getTrending = (timeWindow = 'week') => apiFetch(`/trending/all/${timeWindow}`);

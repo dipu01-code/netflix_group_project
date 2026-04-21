@@ -5,7 +5,7 @@ import './index.css';
 import Navbar            from './components/Navbar';
 import Banner            from './components/Banner';
 import SearchPage        from './pages/SearchPage';
-import MovieDetailModal  from './components/MovieDetailModal';
+import DetailModal       from './components/DetailModal';
 import VideoPlayer       from './components/VideoPlayer';
 
 export default function App() {
@@ -63,7 +63,7 @@ export default function App() {
 
       {/* Global modals — portalled to document.body */}
       {selectedItem && (
-        <MovieDetailModal
+        <DetailModal
           item={selectedItem}
           onClose={closeModal}
           onPlayVideo={handlePlayVideo}
