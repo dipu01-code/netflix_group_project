@@ -1,0 +1,192 @@
+/* ================================================================
+   MovieDetailModal.css — Detail modal overlay
+   ================================================================ */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  background: rgba(0, 0, 0, 0.82);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 16px 60px;
+  overflow-y: auto;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-box {
+  position: relative;
+  width: 100%;
+  max-width: 860px;
+  background: #181818;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 60px rgba(0,0,0,0.9);
+  animation: slideUp 0.28s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.modal-hero { position: relative; aspect-ratio: 16/9; background: #000; overflow: hidden; }
+.modal-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.modal-hero__gradient {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 55%;
+  background: linear-gradient(to top, #181818 0%, transparent 100%);
+}
+
+.modal-hero__play {
+  position: absolute;
+  bottom: var(--space-lg);
+  left: var(--space-lg);
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.btn-play-hero {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 24px;
+  background: var(--netflix-text); color: var(--netflix-black);
+  font-size: 1rem; font-weight: 700;
+  border-radius: var(--radius-md); border: none; cursor: pointer;
+  font-family: var(--font-netflix); transition: var(--transition-fast);
+}
+.btn-play-hero:hover { background: rgba(255,255,255,0.78); }
+
+.btn-more-info {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px;
+  background: rgba(109,109,110,0.7); color: var(--netflix-text);
+  font-size: 1rem; font-weight: 600;
+  border-radius: var(--radius-md); border: none; cursor: pointer;
+  font-family: var(--font-netflix); transition: var(--transition-fast);
+}
+.btn-more-info:hover { background: rgba(109,109,110,0.5); }
+
+.modal-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #181818; display: flex; align-items: center; justify-content: center;
+  color: var(--netflix-text); transition: var(--transition-fast);
+  z-index: 5; border: none; cursor: pointer;
+}
+.modal-close:hover { background: #333; }
+
+.modal-body { padding: var(--space-lg) var(--space-xl) var(--space-xl); }
+
+.modal-info-row {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 10px; margin-bottom: var(--space-md);
+}
+.modal-match  { color: #46d369; font-weight: 700; font-size: 0.95rem; }
+.modal-year, .modal-runtime, .modal-seasons { color: var(--netflix-muted); font-size: 0.9rem; }
+.modal-rating, .modal-hd {
+  border: 1px solid rgba(255,255,255,0.4);
+  padding: 1px 7px; border-radius: 3px;
+  font-size: 0.78rem; color: var(--netflix-muted);
+}
+
+.modal-columns {
+  display: grid;
+  grid-template-columns: 1fr 0.55fr;
+  gap: var(--space-xl);
+}
+
+.modal-overview { font-size: 0.95rem; line-height: 1.7; color: var(--netflix-text); }
+
+.modal-meta-list { display: flex; flex-direction: column; gap: 10px; }
+.modal-meta-item { font-size: 0.82rem; color: var(--netflix-muted); line-height: 1.5; }
+.modal-meta-item strong { color: var(--netflix-text); }
+
+.genre-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--space-lg); }
+.genre-tag {
+  padding: 4px 12px; border-radius: 20px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  font-size: 0.78rem; color: var(--netflix-muted);
+}
+
+.modal-section-title { font-size: 1.15rem; font-weight: 700; margin: var(--space-xl) 0 var(--space-md); color: var(--netflix-text); }
+
+.cast-scroll {
+  display: flex; gap: var(--space-md); overflow-x: auto;
+  padding-bottom: var(--space-sm);
+  scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+.cast-card { flex-shrink: 0; width: 110px; text-align: center; }
+.cast-card img {
+  width: 80px; height: 80px; border-radius: 50%;
+  object-fit: cover; object-position: top;
+  margin: 0 auto var(--space-xs);
+  border: 2px solid rgba(255,255,255,0.1);
+}
+.cast-card__avatar-placeholder {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: var(--netflix-surface); margin: 0 auto var(--space-xs);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--netflix-muted);
+}
+.cast-card__name { font-size: 0.75rem; font-weight: 600; color: var(--netflix-text); }
+.cast-card__char { font-size: 0.68rem; color: var(--netflix-muted); margin-top: 2px; }
+
+.similar-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px; margin-top: var(--space-sm);
+}
+.similar-card {
+  border-radius: var(--radius-md); overflow: hidden;
+  background: #2f2f2f; cursor: pointer; transition: transform 0.2s ease;
+}
+.similar-card:hover { transform: scale(1.03); }
+.similar-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+.similar-card__info { padding: 8px 10px 10px; }
+.similar-card__title { font-size: 0.82rem; font-weight: 600; color: var(--netflix-text); margin-bottom: 4px; }
+.similar-card__overview {
+  font-size: 0.72rem; color: var(--netflix-muted); line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+
+.modal-skeleton { display: flex; flex-direction: column; gap: var(--space-md); padding: var(--space-xl); }
+.sk-bar { height: 18px; border-radius: var(--radius-sm); background: var(--netflix-surface); animation: pulse 1.4s ease-in-out infinite; }
+
+/* Person modal */
+.person-modal-hero {
+  display: flex; gap: var(--space-xl); padding: var(--space-xl);
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+  align-items: flex-start;
+}
+.person-modal-avatar {
+  width: 160px; height: 160px; border-radius: 50%;
+  object-fit: cover; object-position: top; flex-shrink: 0;
+  border: 3px solid rgba(255,255,255,0.12);
+}
+.person-modal-avatar-placeholder {
+  width: 160px; height: 160px; border-radius: 50%;
+  background: var(--netflix-surface); display: flex;
+  align-items: center; justify-content: center;
+  flex-shrink: 0; color: var(--netflix-muted);
+}
+.person-modal-info h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: var(--space-sm); }
+.dept-badge {
+  display: inline-block; padding: 3px 12px;
+  background: rgba(229,9,20,0.18); border: 1px solid rgba(229,9,20,0.4);
+  border-radius: 20px; font-size: 0.8rem; color: var(--netflix-red);
+  margin-bottom: var(--space-md);
+}
+.person-modal-bio { font-size: 0.9rem; color: var(--netflix-muted); line-height: 1.7; max-height: 120px; overflow-y: auto; }
+
+@media (max-width: 640px) {
+  .modal-backdrop { padding: 0; align-items: flex-end; }
+  .modal-box { max-width: 100%; border-radius: 12px 12px 0 0; }
+  .modal-columns { grid-template-columns: 1fr; }
+  .person-modal-hero { flex-direction: column; align-items: center; text-align: center; }
+  .modal-body { padding: var(--space-md); }
+}

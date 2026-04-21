@@ -1,0 +1,407 @@
+/* ================================================================
+   SearchPage.css — Member 3 · Search Page Styles
+   All colours reference tokens from src/index.css (:root variables)
+   ================================================================ */
+
+/* ── Page shell ─────────────────────────────────────────────── */
+.search-page {
+  min-height: 100vh;
+  background-color: var(--netflix-bg);
+  color: var(--netflix-text);
+  font-family: var(--font-netflix);
+  padding-top: 80px; /* clear fixed navbar */
+}
+
+/* ── Sticky search bar area ─────────────────────────────────── */
+.search-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background: linear-gradient(180deg, #000 70%, transparent);
+  padding: var(--space-lg) var(--space-xl) var(--space-sm);
+}
+
+/* ── Input wrapper ──────────────────────────────────────────── */
+.search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 740px;
+  margin: 0 auto;
+}
+
+.search-input-wrap .icon-search {
+  position: absolute;
+  left: 16px;
+  width: 22px;
+  height: 22px;
+  color: var(--netflix-muted);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.search-input {
+  width: 100%;
+  height: 56px;
+  padding: 0 52px 0 52px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  color: var(--netflix-text);
+  font-size: 1.1rem;
+  font-family: var(--font-netflix);
+  transition: var(--transition-normal);
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--netflix-muted);
+}
+
+.search-input:focus {
+  border-color: var(--netflix-text);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.btn-clear {
+  position: absolute;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--netflix-text);
+  transition: var(--transition-fast);
+}
+
+.btn-clear:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* ── Recent searches ────────────────────────────────────────── */
+.recent-searches {
+  max-width: 740px;
+  margin: var(--space-sm) auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.recent-label {
+  font-size: 0.78rem;
+  color: var(--netflix-muted);
+  margin-right: var(--space-xs);
+}
+
+.recent-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: 0.82rem;
+  color: var(--netflix-text);
+  transition: var(--transition-fast);
+  cursor: pointer;
+}
+
+.recent-pill:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.recent-pill .pill-remove {
+  display: flex;
+  color: var(--netflix-muted);
+  transition: var(--transition-fast);
+}
+
+.recent-pill .pill-remove:hover {
+  color: var(--netflix-red);
+}
+
+/* ── Filter tabs ────────────────────────────────────────────── */
+.filter-row {
+  max-width: 740px;
+  margin: var(--space-sm) auto 0;
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.filter-btn {
+  padding: 6px 18px;
+  border-radius: 20px;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  background: transparent;
+  color: var(--netflix-muted);
+  font-size: 0.88rem;
+  font-family: var(--font-netflix);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.filter-btn:hover {
+  border-color: var(--netflix-text);
+  color: var(--netflix-text);
+}
+
+.filter-btn.active {
+  background: var(--netflix-text);
+  border-color: var(--netflix-text);
+  color: var(--netflix-black);
+  font-weight: 600;
+}
+
+/* ── Results section ────────────────────────────────────────── */
+.search-results {
+  padding: var(--space-lg) var(--space-xl) var(--space-3xl);
+}
+
+.results-heading {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-bottom: var(--space-lg);
+  color: var(--netflix-text);
+}
+
+.results-heading span {
+  color: var(--netflix-muted);
+  font-weight: 400;
+}
+
+/* ── Responsive card grid ───────────────────────────────────── */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 8px;
+}
+
+/* People use a separate wider grid */
+.results-grid--people {
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+/* ── Media card ─────────────────────────────────────────────── */
+.media-card {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--netflix-surface);
+  aspect-ratio: 16 / 9;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.media-card:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-card);
+  z-index: 2;
+}
+
+.media-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.media-card .no-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--netflix-surface);
+  color: var(--netflix-muted);
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 8px;
+}
+
+/* hover overlay */
+.media-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.4) 55%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+.media-card:hover .media-card__overlay {
+  opacity: 1;
+}
+
+.media-card__title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--netflix-text);
+  margin-bottom: 4px;
+}
+
+.media-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.media-card__year {
+  font-size: 0.72rem;
+  color: var(--netflix-muted);
+}
+
+.badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.badge--movie { background: var(--netflix-red); color: #fff; }
+.badge--tv    { background: #2979ff; color: #fff; }
+.badge--person { background: #7c3aed; color: #fff; }
+
+/* ── People card ─────────────────────────────────────────────── */
+.person-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: var(--space-sm);
+  border-radius: var(--radius-lg);
+  transition: var(--transition-fast);
+  background: transparent;
+}
+
+.person-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.person-card__avatar {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top;
+  border: 3px solid rgba(255, 255, 255, 0.12);
+  transition: border-color 0.25s ease;
+}
+
+.person-card:hover .person-card__avatar {
+  border-color: var(--netflix-red);
+}
+
+.person-card__avatar-placeholder {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: var(--netflix-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid rgba(255, 255, 255, 0.12);
+  color: var(--netflix-muted);
+}
+
+.person-card__name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--netflix-text);
+}
+
+.person-card__dept {
+  font-size: 0.72rem;
+  color: var(--netflix-muted);
+  text-align: center;
+  margin-top: -6px;
+}
+
+/* ── Skeleton loaders ───────────────────────────────────────── */
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 8px;
+}
+
+.skeleton-card {
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  background: var(--netflix-surface);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.skeleton-card--person {
+  aspect-ratio: unset;
+  height: 160px;
+  border-radius: var(--radius-lg);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1;   }
+}
+
+/* ── Empty state ─────────────────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3xl) var(--space-xl);
+  text-align: center;
+  gap: var(--space-lg);
+  min-height: 40vh;
+}
+
+.empty-state svg {
+  opacity: 0.35;
+  color: var(--netflix-muted);
+}
+
+.empty-state h3 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--netflix-text);
+}
+
+.empty-state p {
+  font-size: 1rem;
+  color: var(--netflix-muted);
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+/* ── Home / trending placeholder ─────────────────────────────── */
+.search-home {
+  padding: var(--space-lg) var(--space-xl);
+}
+
+.search-home h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: var(--space-lg);
+  color: var(--netflix-text);
+}
+
+/* ── Responsive tweaks ───────────────────────────────────────── */
+@media (max-width: 600px) {
+  .search-header { padding: var(--space-md); }
+  .search-results { padding: var(--space-md) var(--space-md) var(--space-2xl); }
+  .filter-row { gap: 6px; }
+  .filter-btn { padding: 5px 12px; font-size: 0.8rem; }
+  .results-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+}

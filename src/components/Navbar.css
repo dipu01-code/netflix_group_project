@@ -1,0 +1,89 @@
+/* ================================================================
+   Navbar.css — Netflix clone top navigation bar
+   ================================================================ */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-sticky);
+  height: 68px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-xl);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+  background: transparent;
+}
+
+.navbar--scrolled,
+.navbar--solid {
+  background: var(--netflix-black);
+  box-shadow: var(--shadow-nav);
+}
+
+.navbar__inner {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.navbar__logo {
+  width: 110px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.navbar__logo img {
+  width: 100%;
+  height: auto;
+}
+
+.navbar__links {
+  display: flex;
+  gap: var(--space-lg);
+  list-style: none;
+}
+
+.navbar__links a {
+  font-size: 0.9rem;
+  color: var(--netflix-muted);
+  transition: var(--transition-fast);
+}
+
+.navbar__links a:hover,
+.navbar__links a.active {
+  color: var(--netflix-text);
+}
+
+.navbar__right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+/* search icon button in navbar */
+.navbar__search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--netflix-text);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  transition: var(--transition-fast);
+}
+
+.navbar__search-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+  .navbar { padding: 0 var(--space-md); }
+  .navbar__links { display: none; }
+}
