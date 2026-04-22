@@ -70,7 +70,7 @@ export default function App() {
         />
       )}
 
-      {videoTitle && (
+      {(videoSrc !== null || videoTitle !== '') && (
         <VideoPlayer
           src={videoSrc}
           title={videoTitle}
