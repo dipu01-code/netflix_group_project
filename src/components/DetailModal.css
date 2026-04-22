@@ -1,6 +1,6 @@
 /* ================================================================
-   DetailModal.css  —  Netflix-style detail modal (Member 2 integration)
-   All colours from :root tokens in src/index.css
+   DetailModal.css  —  Netflix-style detail modal (Member 2)
+   Design tokens come from src/index.css :root
    ================================================================ */
 
 /* ── Overlay ────────────────────────────────────────────────── */
@@ -17,7 +17,16 @@
   animation: dmFadeIn 0.22s ease;
 }
 
-@keyframes dmFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dmFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Pulsing shimmer for skeletons */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
 
 /* ── Card ───────────────────────────────────────────────────── */
 .dm-card {
@@ -66,12 +75,18 @@
   display: block;
 }
 
-/* gradient fade at bottom of hero */
+/* gradient fade at bottom of hero — covers ~65% */
 .dm-hero__gradient {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  height: 65%;
-  background: linear-gradient(to top, #181818 0%, rgba(24,24,24,0.6) 50%, transparent 100%);
+  height: 75%;
+  background: linear-gradient(
+    to top,
+    #181818 0%,
+    rgba(24, 24, 24, 0.85) 30%,
+    rgba(24, 24, 24, 0.4) 60%,
+    transparent 100%
+  );
   pointer-events: none;
 }
 
@@ -82,25 +97,54 @@
   width: 36px; height: 36px;
   border-radius: 50%;
   background: rgba(24, 24, 24, 0.9);
-  border: 2px solid rgba(255,255,255,0.18);
+  border: 2px solid rgba(255, 255, 255, 0.18);
   display: flex; align-items: center; justify-content: center;
   color: var(--netflix-text);
   cursor: pointer;
   z-index: 20;
   transition: var(--transition-fast);
 }
-.dm-close:hover { background: rgba(50,50,50,0.95); border-color: rgba(255,255,255,0.4); }
+.dm-close:hover {
+  background: rgba(50, 50, 50, 0.95);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.08);
+}
+
+/* ── Hero bottom overlay: title + meta + actions ────────────── */
+.dm-hero__bottom {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: var(--space-lg) var(--space-lg) var(--space-lg);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Title inside hero */
+.dm-hero__title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--netflix-text);
+  line-height: 1.15;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+  margin: 0;
+  max-width: 80%;
+}
+
+/* Meta row inside hero */
+.dm-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
 
 /* ── Hero action buttons ────────────────────────────────────── */
 .dm-hero__actions {
-  position: absolute;
-  bottom: var(--space-lg);
-  left: var(--space-lg);
-  right: var(--space-lg);
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  z-index: 10;
 }
 
 /* ▶ Play */
@@ -114,24 +158,34 @@
   transition: var(--transition-fast);
   flex-shrink: 0;
 }
-.dm-btn-play:hover { background: rgba(255,255,255,0.82); }
+.dm-btn-play:hover {
+  background: rgba(255, 255, 255, 0.82);
+  transform: scale(1.04);
+}
 
 /* + My List | 👍 | 👎 circle buttons */
 .dm-btn-circle {
+  position: relative;
   width: 38px; height: 38px;
   border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.5);
-  background: rgba(42,42,42,0.7);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: rgba(42, 42, 42, 0.7);
   color: var(--netflix-text);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; transition: var(--transition-fast);
   flex-shrink: 0;
 }
-.dm-btn-circle:hover { border-color: var(--netflix-text); background: rgba(80,80,80,0.7); }
-.dm-btn-circle.active { border-color: var(--netflix-text); background: rgba(255,255,255,0.15); }
+.dm-btn-circle:hover {
+  border-color: var(--netflix-text);
+  background: rgba(80, 80, 80, 0.7);
+  transform: scale(1.08);
+}
+.dm-btn-circle.active {
+  border-color: var(--netflix-text);
+  background: rgba(255, 255, 255, 0.15);
+}
 
 /* tooltip on hover */
-.dm-btn-circle { position: relative; }
 .dm-btn-circle .dm-tooltip {
   position: absolute;
   bottom: calc(100% + 8px);
@@ -145,49 +199,31 @@
 }
 .dm-btn-circle:hover .dm-tooltip { opacity: 1; }
 
-/* push volume to right edge */
-.dm-hero__actions .spacer { flex: 1; }
-
-/* ── Info strip below hero actions ─────────────────────────── */
-.dm-info-strip {
-  padding: var(--space-md) var(--space-lg) 0;
-}
-
-.dm-title {
-  font-size: 1.65rem;
-  font-weight: 700;
-  color: var(--netflix-text);
-  margin-bottom: 10px;
-  line-height: 1.2;
-}
-
-.dm-meta-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 4px;
-}
-
-.dm-match   { color: #46d369; font-size: 0.9rem; font-weight: 700; }
-.dm-year    { color: var(--netflix-muted); font-size: 0.88rem; }
-.dm-runtime { color: var(--netflix-muted); font-size: 0.88rem; }
+/* ── Meta badge / labels ────────────────────────────────────── */
+.dm-match   { color: #46d369; font-size: 0.88rem; font-weight: 700; }
+.dm-year    { color: var(--netflix-muted); font-size: 0.84rem; }
+.dm-runtime { color: var(--netflix-muted); font-size: 0.84rem; }
 
 .dm-badge {
   display: inline-block;
   padding: 1px 6px;
-  border: 1px solid rgba(255,255,255,0.35);
-  font-size: 0.72rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  font-size: 0.7rem;
   color: var(--netflix-muted);
   border-radius: 3px;
 }
-.dm-badge--hd { letter-spacing: 0.06em; }
+.dm-badge--hd {
+  letter-spacing: 0.06em;
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--netflix-text);
+  font-weight: 700;
+}
 
 /* ── Tab bar ────────────────────────────────────────────────── */
 .dm-tabs {
   display: flex;
   gap: 0;
-  border-bottom: 2px solid rgba(255,255,255,0.1);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   margin: var(--space-md) var(--space-lg) 0;
 }
 
@@ -213,9 +249,9 @@
   transition: transform 0.25s ease;
   transform-origin: center;
 }
-.dm-tab.active       { color: var(--netflix-text); }
+.dm-tab.active        { color: var(--netflix-text); }
 .dm-tab.active::after { transform: scaleX(1); }
-.dm-tab:hover:not(.active) { color: rgba(255,255,255,0.75); }
+.dm-tab:hover:not(.active) { color: rgba(255, 255, 255, 0.75); }
 
 /* ── Tab body ───────────────────────────────────────────────── */
 .dm-tab-body {
@@ -249,7 +285,7 @@
 .dm-right-col {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .dm-right-item {
@@ -264,31 +300,36 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 .dm-genre-pill {
   padding: 3px 10px;
   border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   font-size: 0.72rem;
   color: var(--netflix-muted);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.dm-genre-pill:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--netflix-text);
 }
 
 /* availability dots */
 .dm-avail {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
   margin-top: 4px;
   flex-wrap: wrap;
 }
 .dm-avail-tag {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
   padding: 2px 8px;
   border-radius: 4px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   color: var(--netflix-text);
   letter-spacing: 0.04em;
 }
@@ -309,7 +350,11 @@
 }
 .dm-sim-card:hover {
   transform: scale(1.04);
-  box-shadow: 0 6px 24px rgba(0,0,0,0.7);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
+}
+.dm-sim-card:focus-visible {
+  outline: 2px solid var(--netflix-red);
+  outline-offset: 2px;
 }
 
 .dm-sim-card__thumb {
@@ -321,24 +366,26 @@
 .dm-sim-card__thumb img {
   width: 100%; height: 100%;
   object-fit: cover; display: block;
+  transition: transform 0.3s ease;
 }
+.dm-sim-card:hover .dm-sim-card__thumb img { transform: scale(1.06); }
 .dm-sim-card__thumb .no-thumb {
   width: 100%; height: 100%;
   display: flex; align-items: center; justify-content: center;
   color: var(--netflix-muted); font-size: 0.75rem; padding: 8px;
   text-align: center;
 }
+
 /* rating badge on thumb */
 .dm-sim-card__rating {
   position: absolute;
   bottom: 6px; right: 8px;
   font-size: 0.7rem; font-weight: 700;
   color: #46d369;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
 }
 
-.dm-sim-card__info {
-  padding: 10px 12px 12px;
-}
+.dm-sim-card__info { padding: 10px 12px 12px; }
 .dm-sim-card__head {
   display: flex; justify-content: space-between;
   align-items: flex-start; margin-bottom: 6px;
@@ -381,7 +428,7 @@
   -webkit-appearance: none;
   background: #333;
   color: var(--netflix-text);
-  border: 1.5px solid rgba(255,255,255,0.2);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-md);
   padding: 8px 36px 8px 14px;
   font-size: 0.88rem;
@@ -394,6 +441,7 @@
   transition: var(--transition-fast);
 }
 .dm-season-select:focus { border-color: var(--netflix-text); }
+.dm-season-select:hover { border-color: rgba(255,255,255,0.4); }
 
 .dm-season-ep-count {
   font-size: 0.8rem;
@@ -416,7 +464,8 @@
   transition: background 0.18s ease;
   cursor: pointer;
 }
-.dm-episode:hover { background: rgba(255,255,255,0.06); }
+.dm-episode:hover { background: rgba(255, 255, 255, 0.06); }
+.dm-episode:focus-visible { outline: 2px solid var(--netflix-red); outline-offset: 2px; }
 
 .dm-ep-number {
   width: 28px; flex-shrink: 0;
@@ -445,17 +494,17 @@
   display: flex; align-items: center; justify-content: center;
   color: var(--netflix-muted);
 }
-/* play icon on hover */
+
+/* dark overlay + play icon on episode hover */
 .dm-ep-thumb::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0);
+  background: rgba(0, 0, 0, 0);
   transition: background 0.2s ease;
 }
-.dm-episode:hover .dm-ep-thumb::after {
-  background: rgba(0,0,0,0.45);
-}
+.dm-episode:hover .dm-ep-thumb::after { background: rgba(0, 0, 0, 0.45); }
+
 .dm-ep-play-icon {
   position: absolute;
   inset: 0;
@@ -489,13 +538,13 @@
   width: 30px; height: 30px;
   border-radius: 50%;
   background: transparent;
-  border: 1.5px solid rgba(255,255,255,0.25);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
   color: var(--netflix-text);
   cursor: pointer; transition: var(--transition-fast);
 }
 .dm-ep-download:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(255,255,255,0.5);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 .dm-ep-desc {
   font-size: 0.78rem; color: var(--netflix-muted);
@@ -507,18 +556,49 @@
 }
 
 /* ── Episodes loading skeleton ──────────────────────────────── */
-.dm-ep-skeleton {
-  display: flex; flex-direction: column; gap: 4px;
-}
+.dm-ep-skeleton { display: flex; flex-direction: column; gap: 4px; }
 .dm-ep-skel-row {
   display: flex; gap: var(--space-md);
   padding: var(--space-md);
   align-items: flex-start;
 }
-.dm-ep-skel-num  { width: 28px; height: 24px; border-radius: 4px; background: var(--netflix-surface); animation: pulse 1.4s infinite; }
-.dm-ep-skel-img  { width: 120px; height: 68px; border-radius: var(--radius-sm); background: var(--netflix-surface); flex-shrink: 0; animation: pulse 1.4s infinite; }
-.dm-ep-skel-info { flex: 1; display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
-.dm-ep-skel-bar  { height: 14px; border-radius: 4px; background: var(--netflix-surface); animation: pulse 1.4s infinite; }
+.dm-ep-skel-num  {
+  width: 28px; height: 24px; border-radius: 4px;
+  background: var(--netflix-surface);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+.dm-ep-skel-img  {
+  width: 120px; height: 68px; border-radius: var(--radius-sm);
+  background: var(--netflix-surface); flex-shrink: 0;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+.dm-ep-skel-info {
+  flex: 1; display: flex; flex-direction: column; gap: 8px; padding-top: 4px;
+}
+.dm-ep-skel-bar  {
+  height: 14px; border-radius: 4px;
+  background: var(--netflix-surface);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+/* ── Modal loading skeleton ─────────────────────────────────── */
+.dm-hero-skeleton {
+  aspect-ratio: 16 / 9;
+  background: #111;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+.dm-body-skeleton {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dm-skel-bar {
+  height: 16px;
+  border-radius: 4px;
+  background: var(--netflix-surface);
+  animation: pulse 1.4s ease-in-out infinite;
+}
 
 /* ── Empty / error states ───────────────────────────────────── */
 .dm-empty {
@@ -528,17 +608,19 @@
 
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 700px) {
-  .dm-overlay { padding: 0; align-items: flex-end; }
-  .dm-card { border-radius: 12px 12px 0 0; max-width: 100%; }
-  .dm-two-col { grid-template-columns: 1fr; }
-  .dm-similar-grid { grid-template-columns: repeat(2, 1fr); }
+  .dm-overlay  { padding: 0; align-items: flex-end; }
+  .dm-card     { border-radius: 12px 12px 0 0; max-width: 100%; }
+  .dm-two-col  { grid-template-columns: 1fr; }
+  .dm-similar-grid  { grid-template-columns: repeat(2, 1fr); }
   .dm-tab-body { padding: var(--space-md); }
-  .dm-tabs { margin: var(--space-md) var(--space-md) 0; }
-  .dm-info-strip { padding: var(--space-md) var(--space-md) 0; }
-  .dm-hero__actions { left: var(--space-md); right: var(--space-md); bottom: var(--space-md); }
+  .dm-tabs     { margin: var(--space-md) var(--space-md) 0; }
+  .dm-hero__bottom { padding: var(--space-md); }
+  .dm-hero__title  { font-size: 1.4rem; max-width: 100%; }
 }
 
 @media (max-width: 480px) {
   .dm-similar-grid { grid-template-columns: 1fr; }
-  .dm-ep-thumb { width: 90px; height: 51px; }
+  .dm-ep-thumb     { width: 90px; height: 51px; }
+  .dm-hero__title  { font-size: 1.2rem; }
+  .dm-btn-play     { padding: 7px 16px; font-size: 0.88rem; }
 }

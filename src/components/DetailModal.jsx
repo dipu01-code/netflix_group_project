@@ -23,63 +23,83 @@ const getYear = (data) =>
 
 const getTrailerKey = (videos) => {
   const list = videos?.results || [];
-  const pick = list.find(v => v.site === 'YouTube' && v.type === 'Trailer')
-            || list.find(v => v.site === 'YouTube' && v.type === 'Teaser')
-            || list.find(v => v.site === 'YouTube');
-  return pick?.key || null;
+  return (
+    list.find((v) => v.site === 'YouTube' && v.type === 'Trailer') ||
+    list.find((v) => v.site === 'YouTube' && v.type === 'Teaser') ||
+    list.find((v) => v.site === 'YouTube')
+  )?.key || null;
 };
 
 const getMatchPct = (vote) =>
   vote ? `${Math.round(vote * 10)}% Match` : null;
 
 /* ════════════════════════════════════════════════════════════
-   SVG icons
+   SVG icons (self-contained, no external lib needed)
    ════════════════════════════════════════════════════════════ */
 const IconPlay = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-    <polygon points="5,3 19,12 5,21"/>
+    <polygon points="5,3 19,12 5,21" />
   </svg>
 );
 const IconPlus = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
   </svg>
 );
 const IconCheck = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-    <polyline points="20 6 9 17 4 12"/>
+    <polyline points="20 6 9 17 4 12" />
   </svg>
 );
 const IconThumbUp = () => (
   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/>
-    <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
+    <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" />
+    <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
   </svg>
 );
 const IconThumbDown = () => (
   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/>
-    <path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/>
+    <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z" />
+    <path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17" />
   </svg>
 );
 const IconClose = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+    <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
   </svg>
 );
 const IconDownload = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-    <polyline points="7 10 12 15 17 10"/>
-    <line x1="12" y1="15" x2="12" y2="3"/>
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <polyline points="7 10 12 15 17 10" />
+    <line x1="12" y1="15" x2="12" y2="3" />
   </svg>
 );
 
 /* ════════════════════════════════════════════════════════════
-   Hero section
+   Hero section — contains trailer iframe OR backdrop image,
+   overlaid gradient, title strip, meta row, and action buttons.
+   All positioned absolutely within the 16:9 aspect-ratio box.
    ════════════════════════════════════════════════════════════ */
-function HeroSection({ data, trailerKey, onClose, onPlay, inList, onListToggle, liked, disliked, onLike, onDislike }) {
+function HeroSection({
+  data,
+  trailerKey,
+  onClose,
+  onPlay,
+  inList,
+  onListToggle,
+  liked,
+  disliked,
+  onLike,
+  onDislike,
+  isTV,
+}) {
   const backdropUrl = imgUrl(data?.backdrop_path, 'original');
+  const title       = data?.title || data?.name || '';
+  const year        = getYear(data);
+  const match       = getMatchPct(data?.vote_average);
+  const runtime     = data?.runtime ? fmtRuntime(data.runtime) : null;
+  const ageRating   = data?.adult ? '18+' : 'PG-13';
 
   const iframeSrc = trailerKey
     ? `https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=1&controls=0&loop=1&playlist=${trailerKey}&rel=0&showinfo=0&modestbranding=1&enablejsapi=0`
@@ -87,7 +107,7 @@ function HeroSection({ data, trailerKey, onClose, onPlay, inList, onListToggle, 
 
   return (
     <div className="dm-hero">
-      {/* Autoplay muted trailer – decorative, pointer-events:none */}
+      {/* ── Background: autoplay muted trailer or backdrop ── */}
       {iframeSrc ? (
         <iframe
           className="dm-hero__iframe"
@@ -98,63 +118,99 @@ function HeroSection({ data, trailerKey, onClose, onPlay, inList, onListToggle, 
         />
       ) : (
         backdropUrl && (
-          <img className="dm-hero__backdrop" src={backdropUrl} alt={data?.title || data?.name} />
+          <img
+            className="dm-hero__backdrop"
+            src={backdropUrl}
+            alt={title}
+          />
         )
       )}
 
+      {/* Gradient overlay — fades bottom of hero into card bg */}
       <div className="dm-hero__gradient" />
 
-      {/* ✕ Close */}
-      <button className="dm-close" onClick={onClose} aria-label="Close" id="dm-close-btn">
+      {/* ✕ Close button — top-right */}
+      <button
+        className="dm-close"
+        onClick={onClose}
+        aria-label="Close"
+        id="dm-close-btn"
+      >
         <IconClose />
       </button>
 
-      {/* Action buttons row */}
-      <div className="dm-hero__actions">
-        {/* ▶ Play */}
-        <button className="dm-btn-play" onClick={onPlay} id="dm-play-btn">
-          <IconPlay /> Play
-        </button>
+      {/* ── Bottom overlay: title + meta + action buttons ── */}
+      <div className="dm-hero__bottom">
+        {/* Title */}
+        {title && <h2 className="dm-hero__title">{title}</h2>}
 
-        {/* + My List */}
-        <button
-          className={`dm-btn-circle${inList ? ' active' : ''}`}
-          onClick={onListToggle}
-          aria-label={inList ? 'Remove from My List' : 'Add to My List'}
-          id="dm-list-btn"
-        >
-          {inList ? <IconCheck /> : <IconPlus />}
-          <span className="dm-tooltip">{inList ? 'Remove from List' : 'Add to My List'}</span>
-        </button>
+        {/* Meta row: match %, year, age badge, runtime, HD badge */}
+        <div className="dm-hero__meta">
+          {match   && <span className="dm-match">{match}</span>}
+          {year    && <span className="dm-year">{year}</span>}
+          <span className="dm-badge">{ageRating}</span>
+          {runtime && <span className="dm-runtime">{runtime}</span>}
+          {isTV && data?.number_of_seasons > 0 && (
+            <span className="dm-runtime">
+              {data.number_of_seasons} Season{data.number_of_seasons > 1 ? 's' : ''}
+            </span>
+          )}
+          <span className="dm-badge dm-badge--hd">HD</span>
+        </div>
 
-        {/* 👍 */}
-        <button
-          className={`dm-btn-circle${liked ? ' active' : ''}`}
-          onClick={onLike}
-          aria-label="I like this"
-          id="dm-like-btn"
-        >
-          <IconThumbUp />
-          <span className="dm-tooltip">I like this</span>
-        </button>
+        {/* Action buttons row */}
+        <div className="dm-hero__actions">
+          {/* ▶ Play */}
+          <button
+            className="dm-btn-play"
+            onClick={onPlay}
+            id="dm-play-btn"
+          >
+            <IconPlay /> Play
+          </button>
 
-        {/* 👎 */}
-        <button
-          className={`dm-btn-circle${disliked ? ' active' : ''}`}
-          onClick={onDislike}
-          aria-label="Not for me"
-          id="dm-dislike-btn"
-        >
-          <IconThumbDown />
-          <span className="dm-tooltip">Not for me</span>
-        </button>
+          {/* + My List */}
+          <button
+            className={`dm-btn-circle${inList ? ' active' : ''}`}
+            onClick={onListToggle}
+            aria-label={inList ? 'Remove from My List' : 'Add to My List'}
+            id="dm-list-btn"
+          >
+            {inList ? <IconCheck /> : <IconPlus />}
+            <span className="dm-tooltip">
+              {inList ? 'Remove from List' : 'Add to My List'}
+            </span>
+          </button>
+
+          {/* 👍 */}
+          <button
+            className={`dm-btn-circle${liked ? ' active' : ''}`}
+            onClick={onLike}
+            aria-label="I like this"
+            id="dm-like-btn"
+          >
+            <IconThumbUp />
+            <span className="dm-tooltip">I like this</span>
+          </button>
+
+          {/* 👎 */}
+          <button
+            className={`dm-btn-circle${disliked ? ' active' : ''}`}
+            onClick={onDislike}
+            aria-label="Not for me"
+            id="dm-dislike-btn"
+          >
+            <IconThumbDown />
+            <span className="dm-tooltip">Not for me</span>
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
 /* ════════════════════════════════════════════════════════════
-   Tab bar
+   Tab bar — animated underline indicator
    ════════════════════════════════════════════════════════════ */
 const TABS_MOVIE = ['Overview', 'More Like This'];
 const TABS_TV    = ['Overview', 'Episodes', 'More Like This'];
@@ -162,7 +218,7 @@ const TABS_TV    = ['Overview', 'Episodes', 'More Like This'];
 function TabBar({ tabs, active, onChange }) {
   return (
     <div className="dm-tabs" role="tablist">
-      {tabs.map(t => (
+      {tabs.map((t) => (
         <button
           key={t}
           role="tab"
@@ -179,19 +235,23 @@ function TabBar({ tabs, active, onChange }) {
 }
 
 /* ════════════════════════════════════════════════════════════
-   Overview tab
+   Overview tab — two-column layout (65% / 35%)
+   Left:  overview paragraph + cast
+   Right: genres pills, availability, director, status, language
    ════════════════════════════════════════════════════════════ */
 function OverviewTab({ data }) {
-  const cast    = (data?.credits?.cast || []).slice(0, 8).map(c => c.name).join(', ');
-  const genres  = data?.genres || [];
-  const director = data?.credits?.crew?.find(c => c.job === 'Director');
+  const cast     = (data?.credits?.cast || []).slice(0, 8).map((c) => c.name).join(', ');
+  const genres   = data?.genres || [];
+  const director = data?.credits?.crew?.find((c) => c.job === 'Director');
 
   return (
     <div className="dm-tab-body">
       <div className="dm-two-col">
         {/* ── Left 65% ── */}
         <div>
-          <p className="dm-overview-text">{data?.overview || 'No overview available.'}</p>
+          <p className="dm-overview-text">
+            {data?.overview || 'No overview available.'}
+          </p>
           {cast && (
             <p className="dm-label">
               <strong>Cast: </strong>{cast}
@@ -205,7 +265,7 @@ function OverviewTab({ data }) {
             <div className="dm-right-item">
               <strong>Genres</strong>
               <div className="dm-genres">
-                {genres.map(g => (
+                {genres.map((g) => (
                   <span key={g.id} className="dm-genre-pill">{g.name}</span>
                 ))}
               </div>
@@ -215,7 +275,7 @@ function OverviewTab({ data }) {
           <div className="dm-right-item">
             <strong>Available In</strong>
             <div className="dm-avail">
-              {['HD', '4K UHD', 'Dolby Atmos'].map(tag => (
+              {['HD', '4K UHD', 'Dolby Atmos'].map((tag) => (
                 <span key={tag} className="dm-avail-tag">{tag}</span>
               ))}
             </div>
@@ -235,7 +295,8 @@ function OverviewTab({ data }) {
 
           {data?.original_language && (
             <div className="dm-right-item">
-              <strong>Language: </strong>{data.original_language.toUpperCase()}
+              <strong>Language: </strong>
+              {data.original_language.toUpperCase()}
             </div>
           )}
         </div>
@@ -245,20 +306,27 @@ function OverviewTab({ data }) {
 }
 
 /* ════════════════════════════════════════════════════════════
-   More Like This tab
+   More Like This tab — 3-column grid of related title cards
+   Clicking a card drills into a new detail fetch for that title.
    ════════════════════════════════════════════════════════════ */
 function MoreLikeThisTab({ similar = [], mediaType, onSelect }) {
   if (!similar.length) {
-    return <div className="dm-tab-body"><p className="dm-empty">No similar titles found.</p></div>;
+    return (
+      <div className="dm-tab-body">
+        <p className="dm-empty">No similar titles found.</p>
+      </div>
+    );
   }
 
   return (
     <div className="dm-tab-body">
       <div className="dm-similar-grid">
-        {similar.slice(0, 9).map(item => {
+        {similar.slice(0, 9).map((item) => {
           const thumb = imgUrl(item.backdrop_path || item.poster_path, 'w500');
           const year  = (item.release_date || item.first_air_date || '').slice(0, 4);
-          const match = item.vote_average ? `${Math.round(item.vote_average * 10)}%` : null;
+          const match = item.vote_average
+            ? `${Math.round(item.vote_average * 10)}%`
+            : null;
 
           return (
             <div
@@ -267,13 +335,17 @@ function MoreLikeThisTab({ similar = [], mediaType, onSelect }) {
               onClick={() => onSelect({ ...item, media_type: mediaType })}
               role="button"
               tabIndex={0}
-              onKeyDown={e => e.key === 'Enter' && onSelect({ ...item, media_type: mediaType })}
+              onKeyDown={(e) =>
+                e.key === 'Enter' && onSelect({ ...item, media_type: mediaType })
+              }
             >
               <div className="dm-sim-card__thumb">
                 {thumb
                   ? <img src={thumb} alt={item.title || item.name} loading="lazy" />
                   : <div className="no-thumb">{item.title || item.name}</div>}
-                {match && <span className="dm-sim-card__rating">{match} Match</span>}
+                {match && (
+                  <span className="dm-sim-card__rating">{match} Match</span>
+                )}
               </div>
               <div className="dm-sim-card__info">
                 <div className="dm-sim-card__head">
@@ -294,9 +366,13 @@ function MoreLikeThisTab({ similar = [], mediaType, onSelect }) {
 
 /* ════════════════════════════════════════════════════════════
    Episodes tab (TV only)
+   — Season selector dropdown
+   — Episode list with 120×68px thumbnail, title, runtime,
+     description, and per-row download button
+   — Skeleton while fetching season data
    ════════════════════════════════════════════════════════════ */
 function EpisodesTab({ tvId, seasons = [] }) {
-  const realSeasons = seasons.filter(s => s.season_number > 0);
+  const realSeasons = seasons.filter((s) => s.season_number > 0);
   const [seasonNum, setSeasonNum] = useState(
     realSeasons[0]?.season_number ?? 1
   );
@@ -306,7 +382,7 @@ function EpisodesTab({ tvId, seasons = [] }) {
   useEffect(() => {
     setLoading(true);
     getTVSeason(tvId, seasonNum)
-      .then(d => setEpisodes(d.episodes || []))
+      .then((d) => setEpisodes(d.episodes || []))
       .catch(() => setEpisodes([]))
       .finally(() => setLoading(false));
   }, [tvId, seasonNum]);
@@ -319,11 +395,11 @@ function EpisodesTab({ tvId, seasons = [] }) {
         <select
           className="dm-season-select"
           value={seasonNum}
-          onChange={e => setSeasonNum(Number(e.target.value))}
+          onChange={(e) => setSeasonNum(Number(e.target.value))}
           aria-label="Select season"
           id="dm-season-select"
         >
-          {realSeasons.map(s => (
+          {realSeasons.map((s) => (
             <option key={s.id} value={s.season_number}>
               Season {s.season_number}
             </option>
@@ -336,7 +412,7 @@ function EpisodesTab({ tvId, seasons = [] }) {
         )}
       </div>
 
-      {/* Episode list */}
+      {/* Loading skeleton */}
       {loading ? (
         <div className="dm-ep-skeleton">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -358,42 +434,63 @@ function EpisodesTab({ tvId, seasons = [] }) {
             const rt    = ep.runtime ? `${ep.runtime}m` : null;
 
             return (
-              <div key={ep.id} className="dm-episode" role="button" tabIndex={0}>
+              <div
+                key={ep.id}
+                className="dm-episode"
+                role="button"
+                tabIndex={0}
+              >
+                {/* Episode number */}
                 <span className="dm-ep-number">{idx + 1}</span>
 
                 {/* 120×68 thumbnail */}
                 <div className="dm-ep-thumb">
                   {thumb
                     ? <img src={thumb} alt={ep.name} loading="lazy" />
-                    : <div className="no-thumb">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" opacity="0.3">
-                          <polygon points="5,3 19,12 5,21"/>
+                    : (
+                      <div className="no-thumb">
+                        <svg
+                          width="24" height="24"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          opacity="0.3"
+                        >
+                          <polygon points="5,3 19,12 5,21" />
                         </svg>
-                      </div>}
+                      </div>
+                    )}
                   <div className="dm-ep-play-icon">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
-                      <polygon points="5,3 19,12 5,21"/>
+                    <svg
+                      width="28" height="28"
+                      viewBox="0 0 24 24"
+                      fill="white"
+                    >
+                      <polygon points="5,3 19,12 5,21" />
                     </svg>
                   </div>
                 </div>
 
-                {/* Info */}
+                {/* Episode info */}
                 <div className="dm-ep-info">
                   <div className="dm-ep-head">
-                    <span className="dm-ep-title">{ep.name || `Episode ${ep.episode_number}`}</span>
+                    <span className="dm-ep-title">
+                      {ep.name || `Episode ${ep.episode_number}`}
+                    </span>
                     <div className="dm-ep-actions">
                       {rt && <span className="dm-ep-runtime">{rt}</span>}
                       <button
                         className="dm-ep-download"
                         aria-label="Download episode"
-                        onClick={e => e.stopPropagation()}
+                        onClick={(e) => e.stopPropagation()}
                         id={`dm-ep-download-${ep.id}`}
                       >
                         <IconDownload />
                       </button>
                     </div>
                   </div>
-                  {ep.overview && <p className="dm-ep-desc">{ep.overview}</p>}
+                  {ep.overview && (
+                    <p className="dm-ep-desc">{ep.overview}</p>
+                  )}
                 </div>
               </div>
             );
@@ -405,15 +502,19 @@ function EpisodesTab({ tvId, seasons = [] }) {
 }
 
 /* ════════════════════════════════════════════════════════════
-   Skeleton while modal data loads
+   Skeleton shown while the main modal data is loading
    ════════════════════════════════════════════════════════════ */
 function ModalLoadingSkeleton() {
   return (
     <>
-      <div style={{ aspectRatio: '16/9', background: '#111', animation: 'pulse 1.4s infinite' }} />
-      <div style={{ padding: 'var(--space-lg)', display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div className="dm-hero-skeleton" />
+      <div className="dm-body-skeleton">
         {[70, 45, 100, 80, 55].map((w, i) => (
-          <div key={i} style={{ height: 16, width: `${w}%`, borderRadius: 4, background: 'var(--netflix-surface)', animation: 'pulse 1.4s infinite' }} />
+          <div
+            key={i}
+            className="dm-skel-bar"
+            style={{ width: `${w}%` }}
+          />
         ))}
       </div>
     </>
@@ -422,79 +523,98 @@ function ModalLoadingSkeleton() {
 
 /* ════════════════════════════════════════════════════════════
    Main export — DetailModal
+   Props:
+     item        – TMDB item object (must have .id and .media_type)
+     onClose     – callback to close the modal
+     onPlayVideo – callback(youtubeSrc, data) to open VideoPlayer
    ════════════════════════════════════════════════════════════ */
 export default function DetailModal({ item, onClose, onPlayVideo }) {
   const [data,    setData]    = useState(null);
   const [loading, setLoading] = useState(true);
   const [error,   setError]   = useState(null);
 
-  // Interactive state
-  const [inList,   setInList]   = useState(false);
-  const [liked,    setLiked]    = useState(false);
-  const [disliked, setDisliked] = useState(false);
+  /* Interactive state */
+  const [inList,    setInList]    = useState(false);
+  const [liked,     setLiked]     = useState(false);
+  const [disliked,  setDisliked]  = useState(false);
   const [activeTab, setActiveTab] = useState('Overview');
 
-  // Track current item for "More Like This" drill-down
+  /* Track "current" item — starts as the prop, can be replaced via
+     More Like This drill-down */
   const [current, setCurrent] = useState(item);
 
-  const isTV  = current?.media_type === 'tv';
-  const tabs  = isTV ? TABS_TV : TABS_MOVIE;
+  /* Ref to the scrollable card — used to reset scroll on drill-down */
+  const overlayRef = useRef(null);
 
-  /* ── Fetch detail ── */
+  const isTV = current?.media_type === 'tv';
+  const tabs = isTV ? TABS_TV : TABS_MOVIE;
+
+  /* ── Fetch detail whenever current item changes ── */
   const load = useCallback((it) => {
     if (!it) return;
-    setLoading(true); setError(null); setData(null);
+    setLoading(true);
+    setError(null);
+    setData(null);
     setActiveTab('Overview');
     const fetcher = it.media_type === 'tv' ? getTVDetail : getMovieDetail;
     fetcher(it.id)
-      .then(d => setData(d))
-      .catch(() => setError('Could not load details. Check your TMDB API key.'))
+      .then((d) => setData(d))
+      .catch(() =>
+        setError('Could not load details. Please check your TMDB API key.')
+      )
       .finally(() => setLoading(false));
   }, []);
 
-  useEffect(() => { load(current); }, [current, load]);
-
-  /* ── Keyboard / scroll lock ── */
   useEffect(() => {
-    const esc = (e) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', esc);
+    load(current);
+  }, [current, load]);
+
+  /* ── Keyboard: Escape closes; body scroll lock ── */
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
     return () => {
-      window.removeEventListener('keydown', esc);
+      window.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
     };
   }, [onClose]);
 
-  /* ── Handlers ── */
-  const handleBackdropClick = (e) => { if (e.target === e.currentTarget) onClose(); };
+  /* ── Click outside card to close ── */
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) onClose();
+  };
 
+  /* ── Play button → open VideoPlayer with YouTube embed ── */
   const handlePlay = () => {
     if (!data) return;
     const key = getTrailerKey(data.videos);
-    const src = key ? `https://www.youtube.com/embed/${key}` : null;
+    const src = key
+      ? `https://www.youtube.com/embed/${key}`
+      : null;
     onPlayVideo?.(src, data);
   };
 
-  const handleLike = () => { setLiked(p => !p); setDisliked(false); };
-  const handleDislike = () => { setDisliked(p => !p); setLiked(false); };
+  /* ── Like / dislike (mutually exclusive) ── */
+  const handleLike    = () => { setLiked((p) => !p); setDisliked(false); };
+  const handleDislike = () => { setDisliked((p) => !p); setLiked(false); };
 
+  /* ── More Like This card click ── */
   const handleSelectSimilar = (it) => {
     setCurrent(it);
-    window.scrollTo({ top: 0 });
+    /* Scroll the overlay back to top so the hero is visible */
+    overlayRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  /* ── Derived ── */
+  /* ── Derived values ── */
   const trailerKey = data ? getTrailerKey(data.videos) : null;
-  const year       = data ? getYear(data) : '';
-  const match      = data ? getMatchPct(data.vote_average) : null;
-  const runtime    = data?.runtime ? fmtRuntime(data.runtime) : null;
   const seasons    = data?.seasons || [];
-  const ageRating  = data?.adult ? '18+' : 'PG-13';
   const similar    = data?.similar?.results || [];
 
   return createPortal(
     <div
       className="dm-overlay"
+      ref={overlayRef}
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
@@ -503,56 +623,61 @@ export default function DetailModal({ item, onClose, onPlayVideo }) {
     >
       <div className="dm-card" id="detail-modal-card">
 
-        {/* ── Loading / Error ── */}
+        {/* ── Loading skeleton ── */}
         {loading && <ModalLoadingSkeleton />}
-        {error   && (
-          <div style={{ padding: 'var(--space-2xl)', textAlign: 'center', color: 'var(--netflix-red)' }}>
+
+        {/* ── Error state ── */}
+        {error && !loading && (
+          <div
+            style={{
+              padding: 'var(--space-2xl)',
+              textAlign: 'center',
+              color: 'var(--netflix-red)',
+            }}
+          >
             <p style={{ marginBottom: 12 }}>{error}</p>
             <button
-              style={{ padding: '8px 20px', background: 'var(--netflix-red)', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontFamily: 'var(--font-netflix)' }}
+              style={{
+                padding: '8px 20px',
+                background: 'var(--netflix-red)',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 4,
+                cursor: 'pointer',
+                fontFamily: 'var(--font-netflix)',
+              }}
               onClick={onClose}
-            >Close</button>
+            >
+              Close
+            </button>
           </div>
         )}
 
+        {/* ── Main content ── */}
         {!loading && !error && data && (
           <>
-            {/* ── Hero ── */}
+            {/* ── Hero: trailer/backdrop + title + meta + actions ── */}
             <HeroSection
               data={data}
               trailerKey={trailerKey}
               onClose={onClose}
               onPlay={handlePlay}
               inList={inList}
-              onListToggle={() => setInList(p => !p)}
+              onListToggle={() => setInList((p) => !p)}
               liked={liked}
               disliked={disliked}
               onLike={handleLike}
               onDislike={handleDislike}
+              isTV={isTV}
             />
-
-            {/* ── Info strip ── */}
-            <div className="dm-info-strip">
-              <h2 className="dm-title">{data.title || data.name}</h2>
-              <div className="dm-meta-row">
-                {match    && <span className="dm-match">{match}</span>}
-                {year     && <span className="dm-year">{year}</span>}
-                <span className="dm-badge">{ageRating}</span>
-                {runtime  && <span className="dm-runtime">{runtime}</span>}
-                {isTV && data.number_of_seasons && (
-                  <span className="dm-runtime">
-                    {data.number_of_seasons} Season{data.number_of_seasons > 1 ? 's' : ''}
-                  </span>
-                )}
-                <span className="dm-badge dm-badge--hd">HD</span>
-              </div>
-            </div>
 
             {/* ── Tab bar ── */}
             <TabBar tabs={tabs} active={activeTab} onChange={setActiveTab} />
 
             {/* ── Tab bodies ── */}
-            {activeTab === 'Overview' && <OverviewTab data={data} />}
+            {activeTab === 'Overview' && (
+              <OverviewTab data={data} />
+            )}
 
             {activeTab === 'Episodes' && isTV && (
               <EpisodesTab tvId={current.id} seasons={seasons} />
