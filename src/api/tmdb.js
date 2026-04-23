@@ -1,4 +1,4 @@
-const API_KEY  = import.meta.env.VITE_TMDB_API_KEY;
+const API_KEY  = import.meta.env.VITE_TMDB_API_KEY || '6ca7ff195a767bccd736e3711ea79d2b';
 const BASE_URL = import.meta.env.VITE_TMDB_BASE_URL || 'https://api.themoviedb.org/3';
 export const IMG_BASE   = import.meta.env.VITE_TMDB_IMAGE_BASE || 'https://image.tmdb.org/t/p';
 
@@ -34,3 +34,14 @@ export const getTVSeason = (tvId, seasonNum) => apiFetch(`/tv/${tvId}/season/${s
 
 // ── Trending / Popular ────────────────────────────────────────────────────────
 export const getTrending = (timeWindow = 'week') => apiFetch(`/trending/all/${timeWindow}`);
+export const getTrendingMovies = (timeWindow = 'week') => apiFetch(`/trending/movie/${timeWindow}`);
+export const getTrendingTV = (timeWindow = 'week') => apiFetch(`/trending/tv/${timeWindow}`);
+export const getPopularMovies = () => apiFetch('/movie/popular');
+export const getPopularTV = () => apiFetch('/tv/popular');
+export const getTopRatedMovies = () => apiFetch('/movie/top_rated');
+export const getTopRatedTV = () => apiFetch('/tv/top_rated');
+export const getUpcomingMovies = () => apiFetch('/movie/upcoming');
+export const getAiringTodayTV = () => apiFetch('/tv/airing_today');
+export const getNetflixOriginals = () => apiFetch('/discover/tv', { with_networks: 213 });
+export const getActionMovies = () => apiFetch('/discover/movie', { with_genres: 28, sort_by: 'popularity.desc' });
+export const getComedyMovies = () => apiFetch('/discover/movie', { with_genres: 35, sort_by: 'popularity.desc' });

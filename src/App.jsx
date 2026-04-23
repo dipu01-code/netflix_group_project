@@ -3,8 +3,8 @@ import { Routes, Route } from 'react-router-dom';
 import './index.css';
 
 import Navbar            from './components/Navbar';
-import Banner            from './components/Banner';
 import SearchPage        from './pages/SearchPage';
+import BrowsePage        from './pages/BrowsePage';
 import DetailModal       from './components/DetailModal';
 import VideoPlayer       from './components/VideoPlayer';
 
@@ -13,12 +13,12 @@ export default function App() {
   const [videoSrc,     setVideoSrc]     = useState(null);   // opens video player
   const [videoTitle,   setVideoTitle]   = useState('');
 
-  /* called from cards (SearchPage, Banner, etc.) */
+  /* cards SearchPage, Banner, etc. */
   const handleSelectItem = useCallback((item) => {
     setSelectedItem(item);
   }, []);
 
-  /* called from detail modal "Play" button */
+  /* called modal "Play" button */
   const handlePlayVideo = useCallback((src, data) => {
     setVideoSrc(src);
     setVideoTitle(data?.title || data?.name || '');
@@ -31,13 +31,54 @@ export default function App() {
   return (
     <>
       <Routes>
-        {/* Home — Member 1 Banner */}
+        {/* Browse / Home */}
         <Route
           path="/"
           element={
-            <div className="bg-black min-h-screen">
-              <Banner />
-            </div>
+            <>
+              <Navbar />
+              <BrowsePage onSelectItem={handleSelectItem} />
+            </>
+          }
+        />
+
+        <Route
+          path="/tv-shows"
+          element={
+            <>
+              <Navbar />
+              <BrowsePage onSelectItem={handleSelectItem} />
+            </>
+          }
+        />
+
+        <Route
+          path="/movies"
+          element={
+            <>
+              <Navbar />
+              <BrowsePage onSelectItem={handleSelectItem} />
+            </>
+          }
+        />
+
+        <Route
+          path="/latest"
+          element={
+            <>
+              <Navbar />
+              <BrowsePage onSelectItem={handleSelectItem} />
+            </>
+          }
+        />
+
+        <Route
+          path="/my-list"
+          element={
+            <>
+              <Navbar />
+              <BrowsePage onSelectItem={handleSelectItem} />
+            </>
           }
         />
 

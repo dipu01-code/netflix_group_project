@@ -1,0 +1,103 @@
+
+@font-face {
+  font-family: 'Netflix Sans';
+  src: url('https://assets.nflxext.com/ffe/siteui/acquisition/consumer/fonts/NetflixSans_W_Rg.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Netflix Sans';
+  src: url('https://assets.nflxext.com/ffe/siteui/acquisition/consumer/fonts/NetflixSans_W_Md.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Netflix Sans';
+  src: url('https://assets.nflxext.com/ffe/siteui/acquisition/consumer/fonts/NetflixSans_W_Bd.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --netflix-red: #e50914;
+  --netflix-black: #000000;
+  --netflix-bg: #141414;
+  --netflix-surface: #1f1f1f;
+  --netflix-text: #ffffff;
+  --netflix-muted: #b3b3b3;
+
+  --font-netflix: 'Netflix Sans', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 14px;
+
+  --transition-fast: all 0.15s ease;
+  --transition-normal: all 0.3s ease;
+  --transition-slow: all 0.5s ease;
+
+  --z-base: 1;
+  --z-dropdown: 10;
+  --z-sticky: 100;
+  --z-modal: 1000;
+  --z-overlay: 9999;
+
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.6);
+  --shadow-nav: 0 2px 16px rgba(0, 0, 0, 0.8);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-netflix);
+  background-color: var(--netflix-bg);
+  color: var(--netflix-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: var(--font-netflix);
+}
+
+input {
+  font-family: var(--font-netflix);
+}
