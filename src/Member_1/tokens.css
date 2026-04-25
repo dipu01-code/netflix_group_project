@@ -1,0 +1,43 @@
+@font-face {
+  font-family: 'Netflix Sans';
+  src: url('https://assets.nflxext.com/ffe/siteui/fonts/netflix-sans/v3/NetflixSans_W_Rg.woff2')
+    format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Netflix Sans';
+  src: url('https://assets.nflxext.com/ffe/siteui/fonts/netflix-sans/v3/NetflixSans_W_Md.woff2')
+    format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Netflix Sans';
+  src: url('https://assets.nflxext.com/ffe/siteui/fonts/netflix-sans/v3/NetflixSans_W_Bd.woff2')
+    format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+:root {
+  --netflix-red: #e50914;
+  --netflix-black: #000000;
+  --netflix-bg: #141414;
+  --netflix-surface: #1f1f1f;
+  --netflix-text: #ffffff;
+  --netflix-muted: #b3b3b3;
+  --netflix-card: #181818;
+  --netflix-border: rgba(255, 255, 255, 0.12);
+  --netflix-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
+  --netflix-overlay: rgba(0, 0, 0, 0.72);
+  --netflix-gradient: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.35) 35%,
+    rgba(0, 0, 0, 0.35) 65%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+}
