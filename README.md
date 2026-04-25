@@ -90,12 +90,12 @@ npm run preview
 
 ## Routes
 
-- `/` landing page
-- `/browse` main browse experience
-- `/genre/:genreName` genre listing
-- `/mylist` saved watchlist
-- `/search` title/person search
-- `/watch/:id` player page
+- `#/` landing page
+- `#/browse` main browse experience
+- `#/genre/:genreName` genre listing
+- `#/mylist` saved watchlist
+- `#/search` title/person search
+- `#/watch/:id` player page
 
 ## TMDB Notes
 
