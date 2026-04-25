@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
 import './member2.css';
 
 const navItems = [
@@ -11,15 +10,17 @@ const navItems = [
 ];
 
 function NavItems({ onClickLink }) {
+  const pathname = window.location.pathname;
+
   return navItems.map((item) => (
-    <NavLink
+    <a
       key={item.label}
-      to={item.to}
-      className={({ isActive }) => `browse-link ${isActive ? 'is-active' : ''}`}
+      href={item.to}
+      className={`browse-link ${pathname === item.to ? 'is-active' : ''}`}
       onClick={onClickLink}
     >
       {item.label}
-    </NavLink>
+    </a>
   ));
 }
 

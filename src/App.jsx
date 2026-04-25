@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
 import LandingPage from './Member_1/LandingPage';
 import Navbar from './Member_2/Navbar';
 import HeroBillboard from './Member_2/HeroBillboard';
@@ -134,15 +133,27 @@ function BrowseLayout() {
 }
 
 export default function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/browse" element={<BrowseLayout />} />
-      <Route path="/genre/:genreName" element={<GenrePage />} />
-      <Route path="/mylist" element={<MyList />} />
-      <Route path="/search" element={<SearchPage />} />
-      <Route path="/watch/:id" element={<VideoPlayer />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
-  );
+  const pathname = window.location.pathname;
+
+  if (pathname === '/browse') {
+    return <BrowseLayout />;
+  }
+
+  if (pathname.startsWith('/genre/')) {
+    return <GenrePage />;
+  }
+
+  if (pathname === '/mylist') {
+    return <MyList />;
+  }
+
+  if (pathname === '/search') {
+    return <SearchPage />;
+  }
+
+  if (pathname.startsWith('/watch/')) {
+    return <VideoPlayer />;
+  }
+
+  return <LandingPage />;
 }

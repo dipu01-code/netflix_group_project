@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { API_KEY_ERROR, fetchDetails, getTrailerKey } from './tmdbApi';
 import './member3.css';
 
@@ -372,7 +371,7 @@ export default function VideoPlayer() {
 
       <div className={`video-controls ${showControls ? 'is-visible' : ''}`}>
         <div className="video-top-bar">
-          <Link to="/browse">← Back to browsing</Link>
+          <a href="/browse">← Back to browsing</a>
         </div>
 
         <div className="video-bottom-bar">

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import DetailModal from '../Member_3/DetailModal';
 import { getImageUrl } from '../Member_3/tmdbApi';
 import './member2.css';
@@ -98,9 +97,9 @@ export default function HeroBillboard({ items, loading }) {
         <p>{activeItem.overview}</p>
 
         <div className="billboard-actions">
-          <Link className="play-button" to={`/watch/${activeItem.id}?type=${activeItem.media_type}`}>
+          <a className="play-button" href={`/watch/${activeItem.id}?type=${activeItem.media_type}`}>
             ▶ Play
-          </Link>
+          </a>
           <button className="more-info-button" onClick={() => setIsModalOpen(true)}>
             ⓘ More Info
           </button>

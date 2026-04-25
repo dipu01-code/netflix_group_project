@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import {
   API_KEY_ERROR,
   fetchDetails,
@@ -141,9 +140,9 @@ export default function DetailModal({ isOpen, contentId, mediaType = 'movie', on
               <div className="detail-hero-content">
                 <h2>{details.title}</h2>
                 <div className="detail-primary-actions">
-                  <Link to={`/watch/${details.id}?type=${mediaType}`} className="play-button">
+                  <a href={`/watch/${details.id}?type=${mediaType}`} className="play-button">
                     ▶ Play
-                  </Link>
+                  </a>
                   <button className="round-action" onClick={() => toggleWatchlist(details)}>
                     {isInWatchlist(details.id) ? '✓' : '+'}
                   </button>

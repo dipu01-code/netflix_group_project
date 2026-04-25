@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import DetailModal from '../Member_3/DetailModal';
 import { normalizeTitle } from '../Member_3/tmdbApi';
 import './member2.css';
@@ -115,9 +114,9 @@ export default function MovieCard({ item }) {
               </div>
 
               <div className="movie-card-actions">
-                <Link to={`/watch/${item.id}?type=${item.media_type}`} className="round-action">
+                <a href={`/watch/${item.id}?type=${item.media_type}`} className="round-action">
                   ▶
-                </Link>
+                </a>
                 <button
                   className="round-action"
                   onClick={() => toggleWatchlist(item)}
